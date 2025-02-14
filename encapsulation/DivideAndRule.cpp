@@ -83,7 +83,7 @@ class Bank
         }
     }
 
-	const int &getLiquidity()
+	const int &getLiquidity() const
 	{
 		return liquidity;
 	}
@@ -108,4 +108,14 @@ class Bank
 		clientAccounts[accountId]->setValue(value * 95 / 100);
 		return clientAccounts[accountId]->getValue();
 	}
+
+    const int &loan(const int &accountId, const int &value)
+    {
+        if (liquidity >= value)
+        {
+            liquidity -= value;
+            clientAccounts[accountId]->setValue(value);
+        };
+        return clientAccounts[accountId]->getValue();
+    }
 };

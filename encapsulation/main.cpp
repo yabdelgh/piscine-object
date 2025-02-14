@@ -15,14 +15,18 @@ int main()
     bank.deleteAccount(accountC);
     std::cout << bank << std::endl;
     
-    std::cout << "depot account" << std::endl;
+    std::cout << "deposit:" << std::endl;
     bank.deposit(accountA->getId(), 100);
 	std::cout << bank << std::endl;
     
-	std::cout << "withdrawal account" << std::endl;
+	std::cout << "withdrawal:" << std::endl;
     bank.withdrawal(accountA->getId(), 100);
 	std::cout << bank << std::endl;
 	
+	std::cout << "loan:" << std::endl;
+    bank.loan(accountA->getId(), 200);
+	std::cout << bank << std::endl;
 
+	std::cout << accountA->getValue() << std::endl;	
 	return (0);
 }
