@@ -1,10 +1,10 @@
-NAME = bank
+NAME = graph
 
-SRC =  main.cpp
+SRC =  main.cpp graph.cpp
 
-OBJ =  main.o
+OBJ =  main.o graph.o
 
-HED =
+HED = graph.hpp
 
 CC = clang++ -std=c++98
 
