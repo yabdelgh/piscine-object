@@ -1,10 +1,10 @@
 NAME = bank
 
-SRC =  main.cpp
+SRC =  main.cpp DivideAndRule.cpp
 
-OBJ =  main.o
+OBJ =  main.o DivideAndRule.o
 
-HED =
+HED = DivideAndRule.hpp
 
 CC = clang++ -std=c++98
 
@@ -15,7 +15,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $^ -o $@
 
-%.opp:%.cpp $(HED)
+%.o: %.cpp $(HED)
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:

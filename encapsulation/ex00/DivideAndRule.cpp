@@ -1,121 +1,102 @@
-#include <iostream>
-#include <vector>
-#include <set>
+#include "DivideAndRule.hpp"
 
-class Account
+Account::Account(const int value) : id(generateUniqueID()), value(value) {}
+
+int Account::generateUniqueID()
 {
-	private:
+    static int id = 0;
+    return id++;
+}
 
-	int id;
-	int value;
-
-	int generateUniqueID()
-	{
-		static int id = 0;
-		return id++;
-	}
-
-	public:
-
-	Account(const int value) : id(generateUniqueID()), value(value) {}
-	
-
-	friend std::ostream &operator<<(std::ostream &p_os, const Account &p_account)
-	{
-		p_os << "[" << p_account.id << "] - [" << p_account.value << "]";
-		return (p_os);
-	}
-
-	const int &setValue(int val)
-	{
-		value += val;
-		return value;
-	}
-
-	const int &getValue() const
-	{
-		return value;
-	}
-	
-    const int &getId () const
-	{
-		return id;
-	}
-};
-
-class Bank
+std::ostream &operator<<(std::ostream &p_os, const Account &p_account)
 {
-	private:
-	
-	int liquidity;
-	std::vector<Account *> clientAccounts;
+    p_os << "[" << p_account.id << "] - [" << p_account.value << "]";
+    return p_os;
+}
 
-	public:
-	
-	Bank(const int liquidity = 0) : liquidity(liquidity) {}
+const int &Account::setValue(int val)
+{
+    value += val;
+    return value;
+}
 
-	friend std::ostream &operator<<(std::ostream &p_os, const Bank &p_bank)
-	{
-		p_os << std::endl << "Bank informations : " << std::endl;
-		p_os << "Liquidity : " << p_bank.liquidity << std::endl;
-		for (auto &clientAccount : p_bank.clientAccounts)
-			p_os << *clientAccount << std::endl;
-		return (p_os);
-	}
+const int &Account::getValue() const
+{
+    return value;
+}
 
-	const Account *createAccount(int value)
-	{
-		setLiquidity(value * 5 / 100);
-		Account *a = new Account(value * 95 / 100);
-		clientAccounts.push_back(a);
-		return (a);
-	}
-	
-    void deleteAccount(const Account * a)
-	{
-        for (auto it = clientAccounts.begin(); it != clientAccounts.end(); ) {
-            if ((* it) == a) {
-                delete *it;
-                it = clientAccounts.erase(it);
-            } 
-            else
-                ++it;
-        }
-    }
+const int &Account::getId() const
+{
+    return id;
+}
 
-	const int &getLiquidity() const
-	{
-		return liquidity;
-	}
-	
-	const int &setLiquidity(int value)
-	{
-        if (value > 0 || liquidity >= value)
-		    liquidity += value;
-		return liquidity;
-	}
+Bank::Bank(const int liquidity) : liquidity(liquidity) {}
 
+std::ostream &operator<<(std::ostream &p_os, const Bank &p_bank)
+{
+    p_os << std::endl << "Bank informations : " << std::endl;
+    p_os << "Liquidity : " << p_bank.liquidity << std::endl;
+    for (std::vector<Account*>::const_iterator it = p_bank.clientAccounts.begin(); it != p_bank.clientAccounts.end(); ++it)
+        p_os << **it << std::endl;
 
-	const int &withdrawal(const int &accountId, const int &value)
-	{
-		clientAccounts[accountId]->setValue(-value);
-		return clientAccounts[accountId]->getValue();
-	}
-	
-    const int &deposit(const int &accountId, const int &value)
-	{
-		setLiquidity(value * 5 / 100);
-		clientAccounts[accountId]->setValue(value * 95 / 100);
-		return clientAccounts[accountId]->getValue();
-	}
+    return p_os;
+}
 
-    const int &loan(const int &accountId, const int &value)
+const Account *Bank::createAccount(int value)
+{
+    setLiquidity(value * 5 / 100);
+    Account *a = new Account(value * 95 / 100);
+    clientAccounts.push_back(a);
+    return a;
+}
+
+void Bank::deleteAccount(const Account *a)
+{
+    for (std::vector<Account*>::iterator it = clientAccounts.begin(); it != clientAccounts.end(); )
+{
+    if (*it == a)
     {
-        if (liquidity >= value)
-        {
-            liquidity -= value;
-            clientAccounts[accountId]->setValue(value);
-        };
-        return clientAccounts[accountId]->getValue();
+        delete *it;
+        it = clientAccounts.erase(it);
     }
-};
+    else
+    {
+        ++it;
+    }
+}
+}
+
+const int &Bank::getLiquidity() const
+{
+    return liquidity;
+}
+
+const int &Bank::setLiquidity(int value)
+{
+    if (value > 0 || liquidity >= value)
+        liquidity += value;
+    return liquidity;
+}
+
+const int &Bank::withdrawal(const int &accountId, const int &value)
+{
+    clientAccounts[accountId]->setValue(-value);
+    return clientAccounts[accountId]->getValue();
+}
+
+const int &Bank::deposit(const int &accountId, const int &value)
+{
+    setLiquidity(value * 5 / 100);
+    clientAccounts[accountId]->setValue(value * 95 / 100);
+    return clientAccounts[accountId]->getValue();
+}
+
+const int &Bank::loan(const int &accountId, const int &value)
+{
+    if (liquidity >= value)
+    {
+        liquidity -= value;
+        clientAccounts[accountId]->setValue(value);
+    }
+    return clientAccounts[accountId]->getValue();
+}
