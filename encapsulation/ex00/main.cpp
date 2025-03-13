@@ -1,8 +1,16 @@
 #include "DivideAndRule.hpp"
 #include <stdlib.h>
+#include <cstdlib>
+// #include <>
+void cleanup() {
+	system();
+    // std::cout << "Performing cleanup at program exit." << std::endl;
+    // You could also call _CrtDumpMemoryLeaks() here if using MSVC to detect leaks
+}
 
 int main()
 {
+	std::atexit(cleanup);
 
 	Bank bank = Bank();
 	bank.setLiquidity(1000);
@@ -26,6 +34,7 @@ int main()
 	std::cout << "loan:" << std::endl;
     bank.loan(accountA->getId(), 200);
 	std::cout << bank << std::endl;
+    std::exit(0);  // Or use exit(0);
 
 	// std::cout << accountA->getValue() << std::endl;	
 	return (0);
