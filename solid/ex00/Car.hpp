@@ -43,15 +43,21 @@ public:
     bool in_reverse() const { return isReverse; }
 };
 
-class Brakes {
+class Control {
 private:
-    int brakeForce;
+    int speed;
 public:
-    Brakes() : brakeForce(0) {}
+    Control() : speed(0) {}
     
-    void apply_force(int force) { brakeForce = force; }
-    void apply_emergency_brakes() { brakeForce = 100; }
-    int get_force() const { return brakeForce; }
+    void apply_force(int force) { 
+        if ((speed * force / 100) > speed)
+            speed = 0;
+        else
+            speed -= (speed * force / 100); 
+    }
+    void accelerate(int amount) { speed += amount; }
+    void apply_emergency_brakes() {  speed = 0; }
+    int get_speed() const { return speed; }
 };
 
 class Steering {
@@ -69,21 +75,19 @@ class Car {
 private:
     Engine engine;
     Transmission transmission;
-    Brakes brakes;
+    Control control;
     Steering steering;
-    int speed;
 
 public:
-    Car() : speed(0) {}
-
+    
     void start() { engine.start(); }
     void stop() {
         engine.stop();
-        brakes.apply_force(70);
+        control.apply_force(70);
     }
 
-    void accelerate(int amount) { speed += amount; }
-    int current_speed() const { return speed; }
+    void accelerate(int amount) { control.accelerate(amount); }
+    int current_speed() const { return control.get_speed(); }
 
     void shift_gears_up() { transmission.shift_gears_up(); }
     void shift_gears_down() { transmission.shift_gears_down(); }
@@ -95,13 +99,8 @@ public:
     void straighten_wheels() { steering.straighten_wheels(); }
     int wheel_angle() const { return steering.get_angle(); }
 
-    void apply_force_on_brakes(int force) { brakes.apply_force(force); }
-    void apply_emergency_brakes() { 
-        brakes.apply_emergency_brakes();
-        speed = 0;
-    }
-    int brake_force() const { return brakes.get_force(); }
-
+    void apply_force_on_brakes(int force) { control.apply_force(force); }
+    void apply_emergency_brakes() { control.apply_emergency_brakes(); }
     bool engine_running() const { return engine.isOn(); }
 };
 

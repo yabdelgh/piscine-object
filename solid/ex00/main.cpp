@@ -8,7 +8,7 @@ int main() {
     std::cout << "Engine status: " << (myCar.engine_running() ? "Running" : "Off") << std::endl;
 
     std::cout << "\n=== Accelerating ===" << std::endl;
-    myCar.accelerate(30);
+    myCar.accelerate(160);
     std::cout << "Current speed: " << myCar.current_speed() << " km/h" << std::endl;
 
     std::cout << "\n=== Shifting Gears ===" << std::endl;
@@ -22,17 +22,18 @@ int main() {
 
     std::cout << "\n=== Braking ===" << std::endl;
     myCar.apply_force_on_brakes(50);
-    std::cout << "Brake force applied: " << myCar.brake_force() << "%" << std::endl;
+    // std::cout << "Brake force applied: " << myCar.brake_force() << "%" << std::endl;
+    std::cout << "Speed after braking: " << myCar.current_speed() << " km/h" << std::endl;
 
     std::cout << "\n=== Emergency Stop ===" << std::endl;
     myCar.apply_emergency_brakes();
-    std::cout << "Brake force: " << myCar.brake_force() << "%" << std::endl;
+    // std::cout << "Brake force: " << myCar.brake_force() << "%" << std::endl;
     std::cout << "Speed after emergency stop: " << myCar.current_speed() << " km/h" << std::endl;
 
     std::cout << "\n=== Stopping Car ===" << std::endl;
     myCar.stop();
     std::cout << "Engine status: " << (myCar.engine_running() ? "Running" : "Off") << std::endl;
-    std::cout << "Brake force: " << myCar.brake_force() << "%" << std::endl;
+    // std::cout << "Brake force: " << myCar.brake_force() << "%" << std::endl;
 
     std::cout << "\n=== Reverse Gear ===" << std::endl;
     myCar.reverse();
